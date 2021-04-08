@@ -1,0 +1,31 @@
+import { Component, Output, EventEmitter} from '@angular/core';
+import Debug from 'debug';
+const debug = Debug('aumico:core:<%= classify(name) %>');
+
+@Component({
+    selector: '<%= dasherize(name) %>',
+    templateUrl: './<%= dasherize(name) %><%= type ? '.' + dasherize(type): '' %>.html',
+    styleUrls: ['./<%= dasherize(name) %><%= type ? '.' + dasherize(type): '' %>.<%= style %>'],
+})
+export class <%= classify(name) %><%= classify(type) %>  extends MatStepHeader implements OnDestroy {
+
+    @Output() clickBack = new EventEmitter();
+    @Output() clickForth = new EventEmitter();
+
+    constructor() {
+    }
+
+
+    ngOnInit(): void {
+    }
+
+    onClickBack() {
+        debug('onClickBack');
+        this.clickBack.emit();
+        }
+
+    onClickForth() {
+        debug('onClickForth');
+        this.clickForth.emit();
+    }
+}

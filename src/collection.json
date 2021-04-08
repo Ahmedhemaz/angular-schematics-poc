@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "hello-world": {
+      "description": "A blank schematic.",
+      "factory": "./hello-world",
+      "schema": "./hello-world/schema.json"
+    },
+    "pagination": {
+      "description": "A blank schematic.",
+      "factory": "./pagination",
+      "schema": "./pagination/schema.json"
+    }
+  }
+}
