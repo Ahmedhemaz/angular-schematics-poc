@@ -14,15 +14,22 @@ import {
   noop,
   branchAndMerge,
 } from "@angular-devkit/schematics";
-import { strings } from "@angular-devkit/core";
+import { strings, Path } from "@angular-devkit/core";
 import { Pagination } from "./schema";
 import { parseName } from "../utility/parse-name";
 import { createDefaultPath } from "../utility/workspace";
 import { buildRelativePath, findModuleFromOptions } from "../utility/find-module";
 import { convertFileToAST } from "../my-utils/convert-TS-to-AST";
 import { getComponentPathFrom } from "../my-utils/get-component-path-from-options";
-import { addDeclarationToModule, addExportToModule } from "../utility/ast-utils";
-import { InsertChange } from "../utility/change";
+import {
+  addDeclarationToModule,
+  addExportToModule,
+  addRouteDeclarationToModule,
+  insertImport,
+} from "../utility/ast-utils";
+import { InsertChange, NoopChange } from "../utility/change";
+import { getRoutingModulePath } from "../my-utils/get-routing-module-path";
+import { classify } from "@angular-devkit/core/src/utils/strings";
 
 function addDeclarationToNgModule(options: Pagination): Rule {
   return (host: Tree) => {
@@ -57,6 +64,42 @@ function addDeclarationToNgModule(options: Pagination): Rule {
   };
 }
 
+function buildRoute(options: Pagination, _modulePath: string) {
+  return `{ path: 'test1Path', component: ${classify(options.name)}${classify(options.type)} }`;
+}
+
+function addRouteDeclarationToNgModule(options: Pagination, routingModulePath: Path | undefined): Rule {
+  return (host: Tree) => {
+    const addDeclaration = addRouteDeclarationToModule(
+      convertFileToAST(host, routingModulePath as string),
+      routingModulePath as string,
+      buildRoute(options, options.module as string)
+    ) as InsertChange;
+
+    const recorder = host.beginUpdate(routingModulePath as string);
+    recorder.insertLeft(addDeclaration.pos, addDeclaration.toAdd);
+    host.commitUpdate(recorder);
+
+    let source = convertFileToAST(host, routingModulePath as string);
+    const componentPath = getComponentPathFrom(options);
+    const relativePath = buildRelativePath(routingModulePath as string, componentPath);
+    const classifiedName = strings.classify(options.name) + strings.classify(options.type);
+
+    const insertChange = insertImport(
+      source,
+      routingModulePath as string,
+      classifiedName,
+      relativePath
+    ) as InsertChange;
+    if (!(insertChange instanceof NoopChange)) {
+      const insertImportRecorder = host.beginUpdate(routingModulePath as string);
+      insertImportRecorder.insertLeft(insertChange.pos, insertChange.toAdd);
+      host.commitUpdate(insertImportRecorder);
+    }
+    return host;
+  };
+}
+
 export default function (options: Pagination): Rule {
   return async (host: Tree, context: SchematicContext) => {
     context.logger.info("Pagination: " + JSON.stringify(options));
@@ -69,6 +112,9 @@ export default function (options: Pagination): Rule {
       options.path = await createDefaultPath(host, options.project as string);
     }
     options.module = findModuleFromOptions(host, options);
+
+    const routingModulePath = getRoutingModulePath(host, options.module as string);
+
     context.logger.info("Pagination NgModule: " + options.module);
     const parsedPath = parseName(options.path as string, options.name);
     options.name = parsedPath.name;
@@ -94,6 +140,14 @@ export default function (options: Pagination): Rule {
       move(parsedPath.path + "/" + parsedPath.name),
     ]);
 
-    return chain([branchAndMerge(chain([addDeclarationToNgModule(options), mergeWith(templateSource)]))]);
+    return chain([
+      branchAndMerge(
+        chain([
+          addDeclarationToNgModule(options),
+          addRouteDeclarationToNgModule(options, routingModulePath),
+          mergeWith(templateSource),
+        ])
+      ),
+    ]);
   };
 }
