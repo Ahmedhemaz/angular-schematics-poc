@@ -63,9 +63,10 @@ function addDeclarationToNgModule(options: Pagination): Rule {
     return host;
   };
 }
-
 function buildRoute(options: Pagination, _modulePath: string) {
-  return `{ path: 'test1Path', component: ${classify(options.name)}${classify(options.type)} }`;
+  return `{ path: ${classify(options.name)}${classify(
+    options.type
+  )}.getTestingRoute().path , component: ${classify(options.name)}${classify(options.type)} }`;
 }
 
 function addRouteDeclarationToNgModule(options: Pagination, routingModulePath: Path | undefined): Rule {
