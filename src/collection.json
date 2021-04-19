@@ -10,6 +10,10 @@
       "description": "A blank schematic.",
       "factory": "./pagination",
       "schema": "./pagination/schema.json"
+    },
+    "ng-add": {
+      "description": "Add my library to the project.",
+      "factory": "./ng-add/index#ngAdd"
     }
   }
 }

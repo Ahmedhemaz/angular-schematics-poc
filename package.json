@@ -1,7 +1,10 @@
 {
-  "name": "hello-world",
-  "version": "0.0.0",
-  "description": "A blank schematics",
+  "name": "angular-schematics-demo",
+  "version": "0.1.5",
+  "description": "Angular Schematics POC",
+  "ng-add": {
+    "save": "devDependencies"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js"
