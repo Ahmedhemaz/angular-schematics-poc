@@ -5,4 +5,8 @@ export interface Pagination {
   selector: string;
   path: string;
   project?: string;
+  module?: string;
+  flat?: boolean;
+  route?: string;
+  export?: boolean;
 }
