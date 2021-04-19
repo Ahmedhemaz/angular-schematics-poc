@@ -58,6 +58,12 @@
     "route": {
       "type": "string",
       "description": "The route path for a lazy-loaded module. When supplied, creates a component in the new module, and adds the route to that component in the `Routes` array declared in the module provided in the `--module` option."
+    },
+    "export": {
+      "type": "boolean",
+      "default": false,
+      "description": "The declaring NgModule exports this component.",
+      "x-user-analytics": 19
     }
   },
   "required": ["name"]

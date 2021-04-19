@@ -8,4 +8,5 @@ export interface Pagination {
   module?: string;
   flat?: boolean;
   route?: string;
+  export?: boolean;
 }

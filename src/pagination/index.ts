@@ -51,15 +51,17 @@ function addDeclarationToNgModule(options: Pagination): Rule {
       }
     }
     host.commitUpdate(declarationRecorder);
-    source = convertFileToAST(host, modulePath as string);
-    const exportChanges = addExportToModule(source, modulePath as string, classifiedName, relativePath);
-    const exportRecorder = host.beginUpdate(modulePath as string);
-    for (const change of exportChanges) {
-      if (change instanceof InsertChange) {
-        exportRecorder.insertLeft(change.pos, change.toAdd);
+    if (options.export) {
+      source = convertFileToAST(host, modulePath as string);
+      const exportChanges = addExportToModule(source, modulePath as string, classifiedName, relativePath);
+      const exportRecorder = host.beginUpdate(modulePath as string);
+      for (const change of exportChanges) {
+        if (change instanceof InsertChange) {
+          exportRecorder.insertLeft(change.pos, change.toAdd);
+        }
       }
+      host.commitUpdate(exportRecorder);
     }
-    host.commitUpdate(exportRecorder);
     return host;
   };
 }
