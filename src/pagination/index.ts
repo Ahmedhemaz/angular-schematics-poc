@@ -104,9 +104,7 @@ function addRouteDeclarationToNgModule(options: Pagination, routingModulePath: P
 }
 
 export default function (options: Pagination): Rule {
-  return async (host: Tree, context: SchematicContext) => {
-    context.logger.info("Pagination: " + JSON.stringify(options));
-
+  return async (host: Tree, _context: SchematicContext) => {
     if (!options.name) {
       throw new SchematicsException("Option (name) is required.");
     }
@@ -118,11 +116,9 @@ export default function (options: Pagination): Rule {
 
     const routingModulePath = getRoutingModulePath(host, options.module as string);
 
-    context.logger.info("Pagination NgModule: " + options.module);
     const parsedPath = parseName(options.path as string, options.name);
     options.name = parsedPath.name;
     options.path = parsedPath.path;
-    context.logger.info("Pagination: " + parsedPath.path);
 
     const templateSource = apply(url("./files"), [
       applyTemplates({
@@ -140,7 +136,7 @@ export default function (options: Pagination): Rule {
               : file;
           }) as FileOperator)
         : noop(),
-      move(parsedPath.path + "/" + parsedPath.name),
+      move(parsedPath.path + "/" + strings.dasherize(parsedPath.name)),
     ]);
 
     return chain([

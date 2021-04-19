@@ -63,7 +63,8 @@
       "type": "boolean",
       "default": false,
       "description": "The declaring NgModule exports this component.",
-      "x-user-analytics": 19
+      "x-user-analytics": 19,
+      "x-prompt": "Would you like you export the component"
     }
   },
   "required": ["name"]
