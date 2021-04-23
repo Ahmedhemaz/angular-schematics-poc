@@ -10,6 +10,15 @@
       "description": "A blank schematic.",
       "factory": "./pagination",
       "schema": "./pagination/schema.json"
+    },
+    "ng-add": {
+      "description": "Add my library to the project.",
+      "factory": "./ng-add/index#ngAdd"
+    },
+    "rich-text-test": {
+      "description": "Add rich text ui tests",
+      "factory": "./rich-text-test",
+      "schema": "./rich-text-test/schema.json"
     }
   }
 }

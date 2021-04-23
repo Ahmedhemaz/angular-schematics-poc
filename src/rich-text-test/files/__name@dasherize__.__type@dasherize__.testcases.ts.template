@@ -1,0 +1,59 @@
+import { IRichText } from '@modeso/aumico-lib-notes-fe';
+import { ITestCaseModel } from '../../../../../framework/core/testcase.model';
+import { UiTestCases } from '../../../../../framework/core/testing.ui-testcases.abstract';
+
+const testData1: IRichText[] = [{
+    language: 'de-ch',
+    text: '<p><span style=\"color: rgb(107, 36, 178);\">Hello</span> <span class=\"ql-size-huge\">World</span></p>'
+},
+{ language: 'en-us', text: '<p><strong>hi </strong><em>people</em>' }];
+
+const testData2: IRichText[] = [{ language: 'de-ch', text: '' },
+{ language: 'en-us', text: '' }];
+export class RichTextComponentUiTestCases extends UiTestCases {
+
+    private static instance: RichTextComponentUiTestCases;
+
+    private constructor() {
+        super();
+    }
+
+    public static getInstance(): RichTextComponentUiTestCases {
+        if (!RichTextComponentUiTestCases.instance) {
+            RichTextComponentUiTestCases.instance = new RichTextComponentUiTestCases();
+        }
+        return RichTextComponentUiTestCases.instance;
+    }
+
+    protected setCurrentTestcases() {
+        this.currentTestCases.push({
+            id: 1,
+            name: 'Prefilled Test',
+            mockedFeatureState: {
+                translatableTexts: testData1
+            },
+            data: undefined,
+        } as ITestCaseModel);
+
+        this.currentTestCases.push({
+            id: 2,
+            name: 'Empty array of text and languages Test',
+            mockedFeatureState: {
+                translatableTexts: []
+            },
+            data: undefined,
+        } as ITestCaseModel);
+
+        this.currentTestCases.push({
+            id: 3,
+            name: 'Pass array with languages and empty text',
+            mockedFeatureState: {
+                translatableTexts: testData2
+            },
+            data: undefined,
+        } as ITestCaseModel);
+
+    }
+
+
+}

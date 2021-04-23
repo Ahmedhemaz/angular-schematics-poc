@@ -13,9 +13,10 @@ import {
   forEach,
   noop,
   branchAndMerge,
+  filter,
 } from "@angular-devkit/schematics";
 import { strings, Path } from "@angular-devkit/core";
-import { Pagination } from "./schema";
+import { RichTextOptions } from "./schema";
 import { parseName } from "../utility/parse-name";
 import { createDefaultPath } from "../utility/workspace";
 import { buildRelativePath, findModuleFromOptions } from "../utility/find-module";
@@ -31,7 +32,7 @@ import { InsertChange, NoopChange } from "../utility/change";
 import { getRoutingModulePath } from "../my-utils/get-routing-module-path";
 import { classify } from "@angular-devkit/core/src/utils/strings";
 
-function addDeclarationToNgModule(options: Pagination): Rule {
+function addDeclarationToNgModule(options: RichTextOptions): Rule {
   return (host: Tree) => {
     const modulePath = options.module;
     let source = convertFileToAST(host, modulePath as string);
@@ -65,13 +66,14 @@ function addDeclarationToNgModule(options: Pagination): Rule {
     return host;
   };
 }
-function buildRoute(options: Pagination, _modulePath: string) {
-  return `{ path: ${classify(options.name)}${classify(
-    options.type
-  )}.getTestingRoute().path , component: ${classify(options.name)}${classify(options.type)} }`;
+
+function buildRoute(options: RichTextOptions, _modulePath: string) {
+  let url: string = `${classify(options.name)}${classify(options.type)}.getTestingRoute().path`;
+  url = options.skipTestCases ? url : `${url}+'/:testcaseId'`;
+  return `{ path: ${url} , component: ${classify(options.name)}${classify(options.type)} }`;
 }
 
-function addRouteDeclarationToNgModule(options: Pagination, routingModulePath: Path | undefined): Rule {
+function addRouteDeclarationToNgModule(options: RichTextOptions, routingModulePath: Path | undefined): Rule {
   return (host: Tree) => {
     const addDeclaration = addRouteDeclarationToModule(
       convertFileToAST(host, routingModulePath as string),
@@ -103,7 +105,7 @@ function addRouteDeclarationToNgModule(options: Pagination, routingModulePath: P
   };
 }
 
-export default function (options: Pagination): Rule {
+export default function (options: RichTextOptions): Rule {
   return async (host: Tree, _context: SchematicContext) => {
     if (!options.name) {
       throw new SchematicsException("Option (name) is required.");
@@ -121,6 +123,7 @@ export default function (options: Pagination): Rule {
     options.path = parsedPath.path;
 
     const templateSource = apply(url("./files"), [
+      options.skipTestCases ? filter((path) => !path.endsWith(".testcases.ts.template")) : noop(),
       applyTemplates({
         ...strings,
         "if-flat": (s: string) => (options.flat ? "" : s),

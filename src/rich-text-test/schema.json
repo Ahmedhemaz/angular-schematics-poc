@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsAngularComponent",
-  "title": "Angular Component Options Schema",
+  "id": "RichTextTest",
+  "title": "RichTextTest Options",
   "type": "object",
   "description": "Creates a new generic component definition in the given or default project.",
   "additionalProperties": false,
@@ -33,22 +33,10 @@
       },
       "x-prompt": "What name would you like to use for the component?"
     },
-    "style": {
-      "description": "The file extension or preprocessor to use for style files.",
-      "type": "string",
-      "default": "scss",
-      "enum": ["css", "scss", "sass", "less", "styl"],
-      "x-user-analytics": 5
-    },
     "type": {
       "type": "string",
       "description": "Adds a developer-defined type to the filename, in the format \"name.type.ts\".",
-      "default": "Component"
-    },
-    "selector": {
-      "type": "string",
-      "format": "html-selector",
-      "description": "The HTML selector to use for this component."
+      "default": "ComponentUiTest"
     },
     "module": {
       "type": "string",
@@ -63,8 +51,13 @@
       "type": "boolean",
       "default": false,
       "description": "The declaring NgModule exports this component.",
-      "x-user-analytics": 19,
       "x-prompt": "Would you like you export the component"
+    },
+    "skipTestCases": {
+      "type": "boolean",
+      "default": false,
+      "description": "Adding rich text test cases file and prefix an id to the routing",
+      "x-prompt": "Would you like to skip rich text test cases file and prefix /:testcaseId to routing"
     }
   },
   "required": ["name"]
