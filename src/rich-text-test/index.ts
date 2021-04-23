@@ -66,6 +66,7 @@ function addDeclarationToNgModule(options: RichTextOptions): Rule {
     return host;
   };
 }
+
 function buildRoute(options: RichTextOptions, _modulePath: string) {
   let url: string = `${classify(options.name)}${classify(options.type)}.getTestingRoute().path`;
   url = options.skipTestCases ? url : `${url}+'/:testcaseId'`;
