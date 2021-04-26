@@ -18,53 +18,24 @@ import { strings, Path } from "@angular-devkit/core";
 import { Pagination } from "./schema";
 import { parseName } from "../utility/parse-name";
 import { createDefaultPath } from "../utility/workspace";
-import { buildRelativePath, findModuleFromOptions } from "../utility/find-module";
-import { convertFileToAST } from "../my-utils/convert-TS-to-AST";
-import { getComponentPathFrom } from "../my-utils/get-component-path-from-options";
-import {
-  addDeclarationToModule,
-  addExportToModule,
-  addRouteDeclarationToModule,
-  insertImport,
-} from "../utility/ast-utils";
-import { InsertChange, NoopChange } from "../utility/change";
+import { findModuleFromOptions } from "../utility/find-module";
 import { getRoutingModulePath } from "../my-utils/get-routing-module-path";
 import { classify } from "@angular-devkit/core/src/utils/strings";
+import { addComponentToDeclarationInNgModule } from "../my-utils/add-component-declaration-to-ngModule";
+import { addComponentToExportsInNgModule } from "../my-utils/add-component-to-exports-in-ngModule";
+import { importComponent } from "../my-utils/import-component";
+import { addRouteDeclaration } from "../my-utils/add-route-declaration";
 
 function addDeclarationToNgModule(options: Pagination): Rule {
   return (host: Tree) => {
-    const modulePath = options.module;
-    let source = convertFileToAST(host, modulePath as string);
-    const componentPath = getComponentPathFrom(options);
-    const relativePath = buildRelativePath(modulePath as string, componentPath);
-    const classifiedName = strings.classify(options.name) + strings.classify(options.type);
-    const declarationChanges = addDeclarationToModule(
-      source,
-      modulePath as string,
-      classifiedName,
-      relativePath
-    );
-    const declarationRecorder = host.beginUpdate(modulePath as string);
-    for (const change of declarationChanges) {
-      if (change instanceof InsertChange) {
-        declarationRecorder.insertLeft(change.pos, change.toAdd);
-      }
-    }
-    host.commitUpdate(declarationRecorder);
+    addComponentToDeclarationInNgModule(options, host);
     if (options.export) {
-      source = convertFileToAST(host, modulePath as string);
-      const exportChanges = addExportToModule(source, modulePath as string, classifiedName, relativePath);
-      const exportRecorder = host.beginUpdate(modulePath as string);
-      for (const change of exportChanges) {
-        if (change instanceof InsertChange) {
-          exportRecorder.insertLeft(change.pos, change.toAdd);
-        }
-      }
-      host.commitUpdate(exportRecorder);
+      addComponentToExportsInNgModule(options, host);
     }
     return host;
   };
 }
+
 function buildRoute(options: Pagination, _modulePath: string) {
   return `{ path: ${classify(options.name)}${classify(
     options.type
@@ -73,32 +44,8 @@ function buildRoute(options: Pagination, _modulePath: string) {
 
 function addRouteDeclarationToNgModule(options: Pagination, routingModulePath: Path | undefined): Rule {
   return (host: Tree) => {
-    const addDeclaration = addRouteDeclarationToModule(
-      convertFileToAST(host, routingModulePath as string),
-      routingModulePath as string,
-      buildRoute(options, options.module as string)
-    ) as InsertChange;
-
-    const recorder = host.beginUpdate(routingModulePath as string);
-    recorder.insertLeft(addDeclaration.pos, addDeclaration.toAdd);
-    host.commitUpdate(recorder);
-
-    let source = convertFileToAST(host, routingModulePath as string);
-    const componentPath = getComponentPathFrom(options);
-    const relativePath = buildRelativePath(routingModulePath as string, componentPath);
-    const classifiedName = strings.classify(options.name) + strings.classify(options.type);
-
-    const insertChange = insertImport(
-      source,
-      routingModulePath as string,
-      classifiedName,
-      relativePath
-    ) as InsertChange;
-    if (!(insertChange instanceof NoopChange)) {
-      const insertImportRecorder = host.beginUpdate(routingModulePath as string);
-      insertImportRecorder.insertLeft(insertChange.pos, insertChange.toAdd);
-      host.commitUpdate(insertImportRecorder);
-    }
+    addRouteDeclaration(options, host, routingModulePath, buildRoute);
+    importComponent(options, host, routingModulePath);
     return host;
   };
 }
@@ -120,7 +67,7 @@ export default function (options: Pagination): Rule {
     options.name = parsedPath.name;
     options.path = parsedPath.path;
 
-    const templateSource = apply(url("./files"), [
+    const templateSource = apply(url("./files/component-templates"), [
       applyTemplates({
         ...strings,
         "if-flat": (s: string) => (options.flat ? "" : s),
