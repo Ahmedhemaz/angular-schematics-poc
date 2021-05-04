@@ -13,5 +13,6 @@ export interface SkeletonComponentWithTest {
   route?: string;
   export?: boolean;
   uiTestType?: boolean;
+  libName?: string;
   skipTestCases?: boolean;
 }

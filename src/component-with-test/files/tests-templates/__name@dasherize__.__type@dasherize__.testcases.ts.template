@@ -1,5 +1,5 @@
-import { ITestCaseModel } from '../../../../../framework/core/testcase.model';
-import { UiTestCases } from '../../../../../framework/core/testing.ui-testcases.abstract';
+import { ITestCaseModel } from '../../../../../../framework/core/testcase.model';
+import { UiTestCases } from '../../../../../../framework/core/testing.ui-testcases.abstract';
 
 
 export class <%= classify(name) %><%= classify(type) %>Cases extends UiTestCases {

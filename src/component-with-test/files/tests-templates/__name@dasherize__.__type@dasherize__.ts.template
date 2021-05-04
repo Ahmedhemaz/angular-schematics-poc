@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { UiTestBase } from '../../../../../framework/core/testing.ui-test.abstract';
-import { TestingRoute } from '../../../../../framework/core/testing.route';
+import { UiTestBase } from '../../../../../../framework/core/testing.ui-test.abstract';
+import { TestingRoute } from '../../../../../../framework/core/testing.route';
 import { ActivatedRoute } from '@angular/router';
 import Debug from 'debug';
-import { TestCaseModel } from '../../../../../framework/core/testcase.model';
+import { TestCaseModel } from '../../../../../../framework/core/testcase.model';
 import { <%= classify(name) %><%= classify(type) %>Cases } from './<%=dasherize(name)%>.<%=dasherize(type)%>.testcases';
 
-const debug = Debug('aumico:<%= classify(name) %><%= classify(type) %>');
+const debug = Debug('aumico:<%=dasherize(libName)%>:<%= classify(name) %><%= classify(type) %>');
 @Component({
-    template: `<h1><%= dasherize(name) %> works!<h1>`
+    template: `<h1><%- dasherize(name) %> works!<h1>`
 })
 export class <%= classify(name) %><%= classify(type) %> extends UiTestBase{
     constructor(activatedRoute: ActivatedRoute) {
@@ -19,14 +19,14 @@ export class <%= classify(name) %><%= classify(type) %> extends UiTestBase{
         return new TestingRoute<<%= classify(name) %><%= classify(type) %>>('lib/microservices/aumico-notes/',
             '<%=name%>.component',
             '<%=name%> component',
-            'placeholder for your lib name',
+            '<%=dasherize(libName)%>',
             '<%= uiTestType%>');
     }
 
     public getTestCases(): TestCaseModel[] {
         return <%= classify(name) %><%= classify(type) %>Cases.getInstance().getTestCases();
     }
-    
+
     protected setCurrentTestcaseData(testcaseId: number) {
     }
 

@@ -105,6 +105,11 @@
       "default": false,
       "description": "Adding rich text test cases file and prefix an id to the routing",
       "x-prompt": "Would you like to skip rich text test cases file and prefix /:testcaseId to routing"
+    },
+    "libName": {
+      "type": "string",
+      "description": "lib name to be added in getTestingRoute",
+      "x-prompt": "Enter your lib name to be added in Testing Route"
     }
   },
   "required": ["name"]

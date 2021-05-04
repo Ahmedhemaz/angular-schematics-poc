@@ -94,18 +94,15 @@ export default function (options: SkeletonComponentWithTest): Rule {
     testOptions.name = options.name;
     testOptions.flat = options.flat;
     testOptions.uiTestType = options.uiTestType;
+    testOptions.libName = options.libName;
 
     testOptions.module = findModuleFromOptions(host, testOptions);
 
     const routingModulePath = getRoutingModulePath(host, testOptions.module as string);
 
-    _context.logger.info(testOptions.module);
-
     const parsedTestPath = parseName(testOptions.path as string, testOptions.name);
     testOptions.name = parsedTestPath.name;
     testOptions.path = parsedTestPath.path;
-
-    _context.logger.info(JSON.stringify(testOptions));
 
     const templateTestSource = apply(url("./files/tests-templates"), [
       testOptions.skipTestCases ? filter((path) => !path.endsWith(".testcases.ts.template")) : noop(),
