@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsAngularComponent",
-  "title": "Angular Component Options Schema",
+  "id": "Skeleton component with test",
+  "title": "Skeleton component with test Options",
   "type": "object",
   "description": "Creates a new generic component definition in the given or default project.",
   "additionalProperties": false,
@@ -40,11 +40,6 @@
       "enum": ["css", "scss", "sass", "less", "styl"],
       "x-user-analytics": 5
     },
-    "type": {
-      "type": "string",
-      "description": "Adds a developer-defined type to the filename, in the format \"name.type.ts\".",
-      "default": "Component"
-    },
     "selector": {
       "type": "string",
       "format": "html-selector",
@@ -66,8 +61,26 @@
       "x-user-analytics": 19,
       "x-prompt": "Would you like you export the component"
     },
+    "testPath": {
+      "type": "string",
+      "format": "path",
+      "description": "The path at which to create the component test file, relative to the current workspace. Default is a folder with the same name as the component in the project root.",
+      "visible": false,
+      "x-prompt": "Enter component Test Path"
+    },
+    "type": {
+      "type": "string",
+      "description": "Adds a developer-defined type to the filename, in the format \"name.type.ts\".",
+      "default": "Component"
+    },
+    "componentTestType": {
+      "type": "string",
+      "description": "Adds a developer-defined type to the filename, in the format \"name.type.ts\".",
+      "default": "ComponentUiTest"
+    },
     "uiTestType": {
       "description": "test options type ya wala",
+      "default": "component",
       "type": "string",
       "enum": ["page", "pattern", "component"],
       "x-prompt": {
@@ -86,6 +99,12 @@
         ]
       },
       "x-user-analytics": 5
+    },
+    "skipTestCases": {
+      "type": "boolean",
+      "default": false,
+      "description": "Adding rich text test cases file and prefix an id to the routing",
+      "x-prompt": "Would you like to skip rich text test cases file and prefix /:testcaseId to routing"
     }
   },
   "required": ["name"]

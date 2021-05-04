@@ -19,6 +19,11 @@
       "description": "Add rich text ui tests",
       "factory": "./rich-text-test",
       "schema": "./rich-text-test/schema.json"
+    },
+    "component-with-test": {
+      "description": "skeleton component with test",
+      "factory": "./component-with-test",
+      "schema": "./component-with-test/schema.json"
     }
   }
 }

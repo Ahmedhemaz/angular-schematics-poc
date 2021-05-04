@@ -28,12 +28,4 @@ export class <%= classify(name) %><%= classify(type) %>  extends MatStepHeader i
         debug('onClickForth');
         this.clickForth.emit();
     }
-
-     public static getTestingRoute(): TestingRoute<RichTextComponentUiTest> {
-        return new TestingRoute<RichTextComponentUiTest>('lib/microservices/aumico-notes/',
-            'richText.component',
-            'richText component',
-            'aumico-notes',
-            '<%= uiTestType %>');
-    }
 }
