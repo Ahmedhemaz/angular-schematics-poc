@@ -1,4 +1,0 @@
-<button class="back-button" aum-icon-button icon="round-back" color="basic" tabindex="3" (click)="onClickBack()">
-</button>
-<button  class="forth-button" aum-icon-button icon="round-forth" color="basic" tabindex="3" (click)="onClickForth()">
-</button>

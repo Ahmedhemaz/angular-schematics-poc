@@ -16,7 +16,7 @@ export class <%= classify(name) %><%= classify(type) %> extends UiTestBase{
     }
 
     public static getTestingRoute(): TestingRoute<<%= classify(name) %><%= classify(type) %>> {
-        return new TestingRoute<<%= classify(name) %><%= classify(type) %>>('lib/microservices/aumico-notes/',
+        return new TestingRoute<<%= classify(name) %><%= classify(type) %>>('lib/microservices/<%=dasherize(libName)%>/',
             '<%=name%>.component',
             '<%=name%> component',
             '<%=dasherize(libName)%>',

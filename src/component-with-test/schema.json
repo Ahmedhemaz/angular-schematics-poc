@@ -10,7 +10,8 @@
       "type": "string",
       "format": "path",
       "description": "The path at which to create the component file, relative to the current workspace. Default is a folder with the same name as the component in the project root.",
-      "visible": false
+      "visible": false,
+      "x-prompt": "Enter component path"
     },
     "project": {
       "type": "string",
@@ -84,7 +85,7 @@
       "type": "string",
       "enum": ["page", "pattern", "component"],
       "x-prompt": {
-        "message": "Which stylesheet format would you like to use?",
+        "message": "Which test type would you like to use?",
         "type": "list",
         "items": [
           { "value": "page", "label": "page" },
@@ -103,8 +104,8 @@
     "skipTestCases": {
       "type": "boolean",
       "default": false,
-      "description": "Adding rich text test cases file and prefix an id to the routing",
-      "x-prompt": "Would you like to skip rich text test cases file and prefix /:testcaseId to routing"
+      "description": "Adding test cases file and prefix an id to the routing",
+      "x-prompt": "Would you like to skip  test cases file and prefix /:testcaseId to routing"
     },
     "libName": {
       "type": "string",

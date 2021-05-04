@@ -38,9 +38,9 @@ function addDeclarationToNgModule(options: SkeletonComponentWithTest): Rule {
 }
 
 function buildRoute(options: any, _modulePath: string) {
-  return `{ path: ${classify(options.name)}${classify(
-    options.type
-  )}.getTestingRoute().path , component: ${classify(options.name)}${classify(options.type)} }`;
+  let url: string = `${classify(options.name)}${classify(options.type)}.getTestingRoute().path`;
+  url = options.skipTestCases ? url : `${url}+'/:testcaseId'`;
+  return `{ path: ${url} , component: ${classify(options.name)}${classify(options.type)} }`;
 }
 
 function addRouteDeclarationToNgModule(options: any, routingModulePath: Path | undefined): Rule {
@@ -57,7 +57,7 @@ export default function (options: SkeletonComponentWithTest): Rule {
       throw new SchematicsException("Option (name) is required.");
     }
 
-    if (options.path === undefined) {
+    if (!options.path) {
       options.path = await createDefaultPath(host, options.project as string);
     }
     options.module = findModuleFromOptions(host, options);
