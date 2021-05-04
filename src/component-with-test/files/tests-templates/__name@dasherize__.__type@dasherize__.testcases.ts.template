@@ -1,3 +1,4 @@
+import { ITestCaseModel } from '../../../../../framework/core/testcase.model';
 import { UiTestCases } from '../../../../../framework/core/testing.ui-testcases.abstract';
 
 
