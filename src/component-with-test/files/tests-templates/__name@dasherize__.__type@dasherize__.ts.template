@@ -1,0 +1,34 @@
+import { Component } from '@angular/core';
+import { UiTestBase } from '../../../../../framework/core/testing.ui-test.abstract';
+import { TestingRoute } from '../../../../../framework/core/testing.route';
+import { ActivatedRoute } from '@angular/router';
+import Debug from 'debug';
+import { TestCaseModel } from '../../../../../framework/core/testcase.model';
+import { <%= classify(name) %><%= classify(type) %>Cases } from './<%=dasherize(name)%>.<%=dasherize(type)%>.testcases';
+
+const debug = Debug('aumico:<%= classify(name) %><%= classify(type) %>');
+@Component({
+    template: `<h1><%= dasherize(name) %> works!<h1>`
+})
+export class <%= classify(name) %><%= classify(type) %> extends UiTestBase implements IRichTextDelegate {
+    constructor(activatedRoute: ActivatedRoute) {
+        super(activatedRoute);
+    }
+
+    public static getTestingRoute(): TestingRoute<<%= classify(name) %><%= classify(type) %>> {
+        return new TestingRoute<<%= classify(name) %><%= classify(type) %>>('lib/microservices/aumico-notes/',
+            'richText.component',
+            'richText component',
+            'aumico-notes',
+            '<%= uiTestType%>');
+    }
+
+    public getTestCases(): TestCaseModel[] {
+        return <%= classify(name) %><%= classify(type) %>Cases.getInstance().getTestCases();
+    }
+    protected setCurrentTestcaseData(testcaseId: number) {
+        const testcase = this.getTestcaseById(testcaseId);
+        this.translatableText = testcase.mockedFeatureState.translatableTexts;
+    }
+
+}
