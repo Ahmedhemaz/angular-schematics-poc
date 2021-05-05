@@ -26,6 +26,7 @@ import { getRoutingModulePath } from "../my-utils/get-routing-module-path";
 import { addRouteDeclaration } from "../my-utils/add-route-declaration";
 import { importComponent } from "../my-utils/import-component";
 import { classify } from "@angular-devkit/core/src/utils/strings";
+import { mapOptionsToTestOptions } from "./test-options.mapper";
 
 function addDeclarationToNgModule(options: SkeletonComponentWithTest): Rule {
   return (host: Tree) => {
@@ -87,14 +88,7 @@ export default function (options: SkeletonComponentWithTest): Rule {
 
     ///////////////////////////// test
 
-    const testOptions: any = {};
-    testOptions.path = options.testPath;
-    testOptions.type = options.componentTestType;
-    testOptions.skipTestCases = options.skipTestCases;
-    testOptions.name = options.name;
-    testOptions.flat = options.flat;
-    testOptions.uiTestType = options.uiTestType;
-    testOptions.libName = options.libName;
+    const testOptions: any = mapOptionsToTestOptions(options);
 
     testOptions.module = findModuleFromOptions(host, testOptions);
 
